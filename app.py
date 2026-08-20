@@ -1,5 +1,3 @@
-%%writefile app.py
-
 import streamlit as st
 import torch
 import soundfile as sf
