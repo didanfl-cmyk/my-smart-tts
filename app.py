@@ -2,18 +2,18 @@
 import streamlit as st
 from openai import OpenAI
 import os
-from google.colab import userdata # For Colab secrets
 
 # --- 0. Configuration and API Key Loading ---
+# In Streamlit Community Cloud, secrets are accessed via st.secrets
+# For local development, it can fall back to environment variables
 try:
-    # Attempt to load API key from Colab userdata secrets
-    openai_api_key = userdata.get("OPENAI_API_KEY")
-except Exception:
-    # Fallback for local development or other environments
+    openai_api_key = st.secrets["OPENAI_API_KEY"]
+except KeyError:
     openai_api_key = os.environ.get("OPENAI_API_KEY")
 
+
 if not openai_api_key:
-    st.error("OpenAI API Key가 설정되지 않았습니다. Colab '비밀' 탭(`🔑` 아이콘)에서 'OPENAI_API_KEY'를 설정해주세요. (혹은 환경 변수로 설정)")
+    st.error("OpenAI API Key가 설정되지 않았습니다. Streamlit Community Cloud의 'Secrets' 설정 또는 환경 변수를 확인해주세요.")
     st.stop() # Stop the app if API key is missing
 
 client = OpenAI(api_key=openai_api_key)
@@ -91,4 +91,4 @@ if st.button("🔊 음성 변환하기 (실행)", use_container_width=True, type
                 )
 
 st.markdown("--- ---")
-st.caption("Powered by OpenAI TTS & Streamlit on Google Colab with Localtunnel")
+st.caption("Powered by OpenAI TTS & Streamlit on Streamlit Community Cloud")
